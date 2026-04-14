@@ -23,11 +23,7 @@ import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
-const routeDebug = (...args: unknown[]) => {
-  if (import.meta.env.DEV) {
-    console.log("[route]", ...args);
-  }
-};
+
 
 // Protected Route Component
 function ProtectedRoute({ 
@@ -41,31 +37,17 @@ function ProtectedRoute({
 }) {
   const { user, isLoading, hasRole } = useAuth();
 
-  useEffect(() => {
-    routeDebug("protected route state", {
-      component: Component.displayName ?? Component.name ?? "anonymous",
-      isLoading,
-      hasUser: Boolean(user),
-      role: user?.role ?? null,
-      allowedRoles: allowedRoles ?? null,
-    });
-  }, [Component, allowedRoles, isLoading, user]);
+
 
   if (isLoading) return null; // handled by AuthProvider skeleton
 
   if (!user) {
-    routeDebug("protected route redirecting to /login", {
-      component: Component.displayName ?? Component.name ?? "anonymous",
-    });
+  
     return <Redirect to="/login" />;
   }
 
   if (allowedRoles && !hasRole(allowedRoles)) {
-    routeDebug("protected route rejected by role", {
-      component: Component.displayName ?? Component.name ?? "anonymous",
-      role: user.role,
-      allowedRoles,
-    });
+   
     return <Unauthorized />;
   }
 
@@ -76,17 +58,9 @@ function Router() {
   const { user, isLoading } = useAuth();
   const [location] = useLocation();
 
-  useEffect(() => {
-    routeDebug("router auth state", {
-      location,
-      isLoading,
-      hasUser: Boolean(user),
-      role: user?.role ?? null,
-    });
-  }, [location, isLoading, user]);
+
 
   if (isLoading) {
-    routeDebug("router waiting for auth");
     return null;
   }
 

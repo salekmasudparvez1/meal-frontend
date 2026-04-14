@@ -6,11 +6,7 @@ import { Loader2 } from "lucide-react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
 
-const authDebug = (...args: unknown[]) => {
-  if (import.meta.env.DEV) {
-    console.log("[auth]", ...args);
-  }
-};
+
 
 interface AuthContextType {
   user: UserAccount | null;
@@ -34,11 +30,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthTokenGetter(async () => {
       const currentUser = firebaseAuth.currentUser;
       if (!currentUser) {
-        authDebug("token getter: no firebase currentUser");
+       
         return null;
       }
 
-      authDebug("token getter: requesting ID token", { uid: currentUser.uid });
+      
       return currentUser.getIdToken();
     });
 
@@ -47,10 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     return onAuthStateChanged(firebaseAuth, (currentUser) => {
-      authDebug("firebase auth state changed", {
-        uid: currentUser?.uid ?? null,
-        email: currentUser?.email ?? null,
-      });
+   
       setFirebaseUserUid(currentUser?.uid ?? null);
       setFirebaseReady(true);
     });
@@ -61,10 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    authDebug("auth dependency changed, clearing current-user query", {
-      firebaseReady,
-      firebaseUserUid,
-    });
+  
     queryClient.removeQueries({ queryKey: getGetCurrentUserQueryKey() });
   }, [firebaseReady, firebaseUserUid, queryClient]);
 
@@ -98,16 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       : "unknown";
 
   useEffect(() => {
-    authDebug("auth state snapshot", {
-      firebaseReady,
-      firebaseUserUid,
-      isSessionLoading,
-      hasSessionUser,
-      userRole: user?.role ?? null,
-      isError,
-      authStatus,
-      isLoading,
-    });
+   
   }, [
     firebaseReady,
     firebaseUserUid,
@@ -124,17 +105,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    authDebug("received unauthorized from backend, forcing firebase signOut", {
-      firebaseUserUid,
-    });
     void signOut(firebaseAuth);
   }, [authStatus, firebaseUserUid]);
 
   const handleLogout = useCallback(() => {
     void (async () => {
-      authDebug("manual logout started");
+      
       await Promise.allSettled([signOut(firebaseAuth), logoutMutation.mutateAsync()]);
-      authDebug("manual logout finished, clearing query cache and redirecting");
+     
       queryClient.clear();
       setLocation("/login");
     })();

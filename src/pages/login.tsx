@@ -13,11 +13,6 @@ import { useToast } from "@/hooks/use-toast";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth } from "@/lib/firebase";
 
-const loginDebug = (...args: unknown[]) => {
-  if (import.meta.env.DEV) {
-    console.log("[login]", ...args);
-  }
-};
 
 const loginSchema = z.object({
   email: z.string().email("A valid email is required"),
@@ -57,12 +52,9 @@ export default function Login() {
     const normalizedEmail = values.email.trim().toLowerCase();
 
     try {
-      loginDebug("submit start", { email: normalizedEmail });
+     
       await signInWithEmailAndPassword(firebaseAuth, normalizedEmail, values.password);
-      loginDebug("firebase sign-in success", {
-        uid: firebaseAuth.currentUser?.uid ?? null,
-        email: firebaseAuth.currentUser?.email ?? null,
-      });
+    
 
       const session = await queryClient.fetchQuery(
         getGetCurrentUserQueryOptions({
@@ -72,22 +64,19 @@ export default function Login() {
           },
         }),
       );
-      loginDebug("backend session fetch success", {
-        hasUser: Boolean(session?.user),
-        role: session?.user?.role ?? null,
-      });
+     
 
       queryClient.setQueryData(userQueryKey, session);
       toast({ title: "Login successful", description: "Welcome back!" });
-      loginDebug("navigating to / after login");
+     
       setLocation("/");
     } catch (error) {
-      loginDebug("login flow failed", error);
+     
 
       // During auth state transition/navigation, a pending query can be canceled.
       // This is not a real login failure and should not show a destructive toast.
       if (isCancelledLikeError(error)) {
-        loginDebug("ignoring canceled login-side request", error);
+        
         return;
       }
 
