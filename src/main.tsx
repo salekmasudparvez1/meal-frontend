@@ -6,7 +6,7 @@ import { setBaseUrl } from "@/lib/api-client";
 
 // Use explicit backend origin in local development unless overridden.
 if (import.meta.env.DEV) {
-	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
+	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://dn-meal-api.vercel.app"
 	setBaseUrl(apiBaseUrl);
 }
 
