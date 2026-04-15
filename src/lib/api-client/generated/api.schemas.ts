@@ -74,6 +74,7 @@ export interface StudentSummary {
   totalDeposits: number;
   totalBazarCost: number;
   currentBalance: number;
+  meal_status: "ON" | "OFF";
   createdAt: string;
 }
 

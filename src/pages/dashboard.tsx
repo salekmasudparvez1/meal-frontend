@@ -1,7 +1,27 @@
-import { useGetDashboard, useGetStudent, getGetDashboardQueryKey, getGetStudentQueryKey } from "@/lib/api-client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  useGetDashboard,
+  useGetStudent,
+  getGetDashboardQueryKey,
+  getGetStudentQueryKey,
+} from "@/lib/api-client";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Utensils, Wallet, Activity, TrendingUp, TrendingDown, Clock, ChevronRight } from "lucide-react";
+import {
+  Users,
+  Utensils,
+  Wallet,
+  Activity,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { format } from "date-fns";
@@ -11,7 +31,11 @@ import { useMemo, useState } from "react";
 export default function Dashboard() {
   const { isUser, user } = useAuth();
   const [calendarMonthOffset, setCalendarMonthOffset] = useState(0);
-  const { data: dashboard, isLoading, error } = useGetDashboard({
+  const {
+    data: dashboard,
+    isLoading,
+    error,
+  } = useGetDashboard({
     query: {
       queryKey: getGetDashboardQueryKey(),
       enabled: !isUser,
@@ -20,8 +44,13 @@ export default function Dashboard() {
 
   // If USER, we fetch their specific student profile
   const { data: studentProfile, isLoading: isStudentLoading } = useGetStudent(
-    user?.studentId || 0, 
-    { query: { enabled: isUser && !!user?.studentId, queryKey: getGetStudentQueryKey(user?.studentId || 0) } }
+    user?.studentId || 0,
+    {
+      query: {
+        enabled: isUser && !!user?.studentId,
+        queryKey: getGetStudentQueryKey(user?.studentId || 0),
+      },
+    },
   );
 
   const calendarMonthDate = useMemo(() => {
@@ -85,20 +114,30 @@ export default function Dashboard() {
   if (isLoading || (isUser && isStudentLoading)) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-serif font-bold text-primary">Dashboard</h1>
+        <h1 className="text-3xl font-serif font-bold text-primary">
+          Dashboard
+        </h1>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 w-full" />)}
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-32 w-full" />
+          ))}
         </div>
       </div>
     );
   }
 
   if (!isUser && (error || !dashboard)) {
-    return <div className="text-destructive">Failed to load dashboard data.</div>;
+    return (
+      <div className="text-destructive">Failed to load dashboard data.</div>
+    );
   }
 
   if (isUser && !studentProfile) {
-    return <div className="text-destructive">Failed to load your dashboard data.</div>;
+    return (
+      <div className="text-destructive">
+        Failed to load your dashboard data.
+      </div>
+    );
   }
 
   return (
@@ -109,7 +148,9 @@ export default function Dashboard() {
             {isUser ? "My Dashboard" : "Overview"}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {isUser ? "Your meal and financial summary." : "Hostel system at a glance."}
+            {isUser
+              ? "Your meal and financial summary."
+              : "Hostel system at a glance."}
           </p>
         </div>
         {!isUser && (
@@ -123,49 +164,89 @@ export default function Dashboard() {
       {isUser && studentProfile ? (
         <>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+             <Card className="hover-elevate">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Meal Status
+                </CardTitle>
+                <ShoppingBagIcon className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+
+              <CardContent>
+                <div
+                  className={`text-3xl font-bold font-mono ${
+                    studentProfile.meal_status === "ON"
+                      ? "text-emerald-500"
+                      : "text-destructive"
+                  }`}
+                >
+                  {studentProfile.meal_status}
+                </div>
+
+                <p className="text-xs text-muted-foreground mt-1">
+                  {studentProfile.totalMeals*100 +100 >= studentProfile.totalDeposits
+                    ? "You blanc has ennded, please add funds or contact admin"
+                    : "You have enough balance for your meals"}
+                </p>
+              </CardContent>
+            </Card>
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">My Meals</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  My Meals
+                </CardTitle>
                 <Utensils className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold font-mono">{studentProfile.totalMeals}</div>
-                <p className="text-xs text-muted-foreground mt-1">Total logged meals</p>
+                <div className="text-3xl font-bold font-mono">
+                  {studentProfile.totalMeals}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Total logged meals
+                </p>
               </CardContent>
             </Card>
 
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Deposits</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Deposits
+                </CardTitle>
                 <Wallet className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold font-mono text-primary">${studentProfile.totalDeposits.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground mt-1">Funds added</p>
+                <div className="text-3xl font-bold font-mono text-primary">
+                  ${studentProfile.totalDeposits.toFixed(2)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Funds added
+                </p>
               </CardContent>
             </Card>
 
-            <Card className="hover-elevate">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Bazar Share</CardTitle>
-                <ShoppingBagIcon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold font-mono text-destructive">${studentProfile.totalBazarCost.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground mt-1">Your share of expenses</p>
-              </CardContent>
-            </Card>
+           
 
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Current Balance</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Current Balance
+                </CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className={cn("text-3xl font-bold font-mono", studentProfile.currentBalance >= 0 ? "text-primary" : "text-destructive")}>
+                <div
+                  className={cn(
+                    "text-3xl font-bold font-mono",
+                    studentProfile.currentBalance >= 0
+                      ? "text-primary"
+                      : "text-destructive",
+                  )}
+                >
                   ${studentProfile.currentBalance.toFixed(2)}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Estimated balance</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Estimated balance
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -175,7 +256,10 @@ export default function Dashboard() {
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle>Current Month Meal Status</CardTitle>
-                  <CardDescription>Your per-day meal entries for {format(calendarMonthDate, "MMMM yyyy")}.</CardDescription>
+                  <CardDescription>
+                    Your per-day meal entries for{" "}
+                    {format(calendarMonthDate, "MMMM yyyy")}.
+                  </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
@@ -217,14 +301,18 @@ export default function Dashboard() {
                     >
                       {cell.day ? (
                         <>
-                          <div className="text-xs text-muted-foreground">{cell.day}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {cell.day}
+                          </div>
                           <div className="mt-2 text-center">
                             {cell.value != null ? (
                               <span className="inline-block rounded bg-primary/10 px-2 py-1 font-mono text-primary">
                                 {cell.value}
                               </span>
                             ) : (
-                              <span className="text-xs text-muted-foreground">-</span>
+                              <span className="text-xs text-muted-foreground">
+                                -
+                              </span>
                             )}
                           </div>
                         </>
@@ -242,16 +330,27 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 {studentProfile.deposits.length === 0 ? (
-                  <p className="text-muted-foreground text-sm text-center py-4">No deposits found.</p>
+                  <p className="text-muted-foreground text-sm text-center py-4">
+                    No deposits found.
+                  </p>
                 ) : (
                   <div className="space-y-4">
                     {studentProfile.deposits.slice(0, 10).map((deposit) => (
-                      <div key={deposit.id} className="flex items-center justify-between border-b border-border/50 pb-2 last:border-0 last:pb-0">
+                      <div
+                        key={deposit.id}
+                        className="flex items-center justify-between border-b border-border/50 pb-2 last:border-0 last:pb-0"
+                      >
                         <div>
-                          <p className="font-medium">{format(new Date(deposit.date), "MMM d, yyyy")}</p>
-                          <p className="text-xs text-muted-foreground">{deposit.note || "No note"}</p>
+                          <p className="font-medium">
+                            {format(new Date(deposit.date), "MMM d, yyyy")}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {deposit.note || "No note"}
+                          </p>
                         </div>
-                        <span className="font-mono font-semibold text-primary">+${deposit.amount.toFixed(2)}</span>
+                        <span className="font-mono font-semibold text-primary">
+                          +${deposit.amount.toFixed(2)}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -265,48 +364,79 @@ export default function Dashboard() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Students</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Students
+                </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold font-mono">{dashboard.totalStudents}</div>
-                <p className="text-xs text-muted-foreground mt-1">Active residents</p>
+                <div className="text-3xl font-bold font-mono">
+                  {dashboard?.totalStudents}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Active residents
+                </p>
               </CardContent>
             </Card>
 
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Meals Today</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Meals Today
+                </CardTitle>
                 <Utensils className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold font-mono">{dashboard.totalMealsToday}</div>
-                <p className="text-xs text-muted-foreground mt-1">Logged for today</p>
+                <div className="text-3xl font-bold font-mono">
+                  {dashboard?.totalMealsToday}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Logged for today
+                </p>
               </CardContent>
             </Card>
 
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Monthly Expense</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Monthly Expense
+                </CardTitle>
                 <TrendingUp className="h-4 w-4 text-destructive" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold font-mono">${dashboard.monthlyExpense.toFixed(2)}</div>
-                <p className="text-xs text-muted-foreground mt-1">Total bazar costs</p>
+                <div className="text-3xl font-bold font-mono">
+                  ${dashboard?.monthlyExpense.toFixed(2)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Total bazar costs
+                </p>
               </CardContent>
             </Card>
 
             <Card className="hover-elevate">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Net Balance</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Net Balance
+                </CardTitle>
                 <Wallet className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className={cn("text-3xl font-bold font-mono", dashboard.netBalance >= 0 ? "text-primary" : "text-destructive")}>
-                  ${Math.abs(dashboard.netBalance).toFixed(2)}
-                  {dashboard.netBalance < 0 && <span className="text-sm ml-1">deficit</span>}
+                <div
+                  className={cn(
+                    "text-3xl font-bold font-mono",
+                    (dashboard?.netBalance ?? 0) >= 0
+                      ? "text-primary"
+                      : "text-destructive",
+                  )}
+                >
+                  ${Math.abs(dashboard?.netBalance ?? 0).toFixed(2)}
+                  {(dashboard?.netBalance ?? 0) < 0 && (
+                    <span className="text-sm ml-1">deficit</span>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Overall hostel balance</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Overall hostel balance
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -317,23 +447,30 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Recent Meals</CardTitle>
-                    <CardDescription>Latest meal entries across the hostel.</CardDescription>
+                    <CardDescription>
+                      Latest meal entries across the hostel.
+                    </CardDescription>
                   </div>
                   <Link href="/meals">
-                    <span className="text-sm text-primary hover:underline cursor-pointer">View all</span>
+                    <span className="text-sm text-primary hover:underline cursor-pointer">
+                      View all
+                    </span>
                   </Link>
                 </div>
               </CardHeader>
               <CardContent className="flex-1">
-                {dashboard.recentMeals.length === 0 ? (
+                {dashboard?.recentMeals.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
                     <Utensils className="h-8 w-8 mb-2 opacity-20" />
                     <p>No meals logged recently</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {dashboard.recentMeals.map(meal => (
-                      <div key={meal.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
+                    {dashboard?.recentMeals.map((meal) => (
+                      <div
+                        key={meal.id}
+                        className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
                             {meal.studentName.charAt(0)}
@@ -342,7 +479,10 @@ export default function Dashboard() {
                             <p className="font-medium">{meal.studentName}</p>
                             <div className="flex items-center text-xs text-muted-foreground">
                               <Clock className="h-3 w-3 mr-1" />
-                              {format(new Date(meal.createdAt), 'MMM d, h:mm a')}
+                              {format(
+                                new Date(meal.createdAt),
+                                "MMM d, h:mm a",
+                              )}
                             </div>
                           </div>
                         </div>
@@ -361,23 +501,30 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Recent Deposits</CardTitle>
-                    <CardDescription>Latest funds added by students.</CardDescription>
+                    <CardDescription>
+                      Latest funds added by students.
+                    </CardDescription>
                   </div>
                   <Link href="/deposits">
-                    <span className="text-sm text-primary hover:underline cursor-pointer">View all</span>
+                    <span className="text-sm text-primary hover:underline cursor-pointer">
+                      View all
+                    </span>
                   </Link>
                 </div>
               </CardHeader>
               <CardContent className="flex-1">
-                {dashboard.recentDeposits.length === 0 ? (
+                {dashboard?.recentDeposits.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
                     <Wallet className="h-8 w-8 mb-2 opacity-20" />
                     <p>No deposits made recently</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {dashboard.recentDeposits.map(deposit => (
-                      <div key={deposit.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
+                    {dashboard?.recentDeposits.map((deposit) => (
+                      <div
+                        key={deposit.id}
+                        className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 rounded-full bg-secondary/50 flex items-center justify-center text-secondary-foreground font-bold">
                             {deposit.studentName.charAt(0)}
@@ -386,7 +533,10 @@ export default function Dashboard() {
                             <p className="font-medium">{deposit.studentName}</p>
                             <div className="flex items-center text-xs text-muted-foreground">
                               <Clock className="h-3 w-3 mr-1" />
-                              {format(new Date(deposit.createdAt), 'MMM d, h:mm a')}
+                              {format(
+                                new Date(deposit.createdAt),
+                                "MMM d, h:mm a",
+                              )}
                             </div>
                           </div>
                         </div>

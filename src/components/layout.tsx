@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Users, Utensils, Wallet, ShoppingBag, FileText, Menu, Settings, ShieldAlert, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, Utensils, Wallet, ShoppingBag, FileText, Menu, Settings, ShieldAlert, LogOut, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -18,6 +18,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { name: "Manager Portal", href: "/manager", icon: Settings, show: isSuperAdmin || isMealManager },
     { name: "Students", href: "/students", icon: Users, show: isSuperAdmin || isMealManager },
     { name: "Meals", href: "/meals", icon: Utensils, show: isSuperAdmin || isMealManager },
+    { name: "Meal (ON/OFF)", href: "/meal-status", icon: Activity, show: isSuperAdmin || isMealManager },
     { name: "Deposits", href: "/deposits", icon: Wallet, show: isSuperAdmin || isMealManager },
     { name: "Bazar", href: "/bazar", icon: ShoppingBag, show: isSuperAdmin || isMealManager },
     { name: "Reports", href: "/reports", icon: FileText, show: isSuperAdmin || isMealManager },

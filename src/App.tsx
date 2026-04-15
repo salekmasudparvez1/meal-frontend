@@ -20,6 +20,7 @@ import AdminUsers from "@/pages/admin/users";
 import Manager from "@/pages/manager";
 import Unauthorized from "@/pages/unauthorized";
 import NotFound from "@/pages/not-found";
+import MealSatus from "./pages/mealsStatus";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ function Router() {
               </Route>
               
               <Route path="/meals" component={() => <ProtectedRoute component={Meals} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
+              <Route path="/meal-status" component={() => <ProtectedRoute component={MealSatus} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
               <Route path="/deposits" component={() => <ProtectedRoute component={Deposits} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
               
               <Route path="/bazar" component={() => <ProtectedRoute component={BazarLists} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />

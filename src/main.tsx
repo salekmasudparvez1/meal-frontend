@@ -4,11 +4,10 @@ import App from "./App";
 import "./index.css";
 import { setBaseUrl } from "@/lib/api-client";
 
-// Use explicit backend origin in local development unless overridden.
-if (import.meta.env.DEV) {
-	const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://dn-meal-api.vercel.app"
-	setBaseUrl(apiBaseUrl);
-}
+// Apply backend origin for both dev and production when provided.
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+setBaseUrl(configuredApiBaseUrl);
+
 
 class AppErrorBoundary extends React.Component<
 	{ children: React.ReactNode },
