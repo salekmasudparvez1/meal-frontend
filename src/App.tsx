@@ -21,6 +21,7 @@ import Manager from "@/pages/manager";
 import Unauthorized from "@/pages/unauthorized";
 import NotFound from "@/pages/not-found";
 import MealSatus from "./pages/mealsStatus";
+import OtherExpenses from "@/pages/other-expenses";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ function Router() {
             <Switch>
               <Route path="/" component={() => <ProtectedRoute component={Dashboard} />} />
               <Route path="/dashboard" component={() => <ProtectedRoute component={Dashboard} />} />
+              <Route path="/other-expenses" component={() => <ProtectedRoute component={OtherExpenses} />} />
               <Route>
                 <Redirect to="/" />
               </Route>
@@ -100,6 +102,7 @@ function Router() {
               <Route path="/meals" component={() => <ProtectedRoute component={Meals} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
               <Route path="/meal-status" component={() => <ProtectedRoute component={MealSatus} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
               <Route path="/deposits" component={() => <ProtectedRoute component={Deposits} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
+              <Route path="/other-expenses" component={() => <ProtectedRoute component={OtherExpenses} />} />
               
               <Route path="/bazar" component={() => <ProtectedRoute component={BazarLists} allowedRoles={[Role.SUPER_ADMIN, Role.MEAL_MANAGER]} />} />
               <Route path="/bazar/:id">

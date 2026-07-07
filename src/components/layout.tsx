@@ -20,6 +20,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { name: "Meals", href: "/meals", icon: Utensils, show: isSuperAdmin || isMealManager },
     { name: "Meal (ON/OFF)", href: "/meal-status", icon: Activity, show: isSuperAdmin || isMealManager },
     { name: "Deposits", href: "/deposits", icon: Wallet, show: isSuperAdmin || isMealManager },
+    { name: "Other Expenses", href: "/other-expenses", icon: Wallet, show: true },
     { name: "Bazar", href: "/bazar", icon: ShoppingBag, show: isSuperAdmin || isMealManager },
     { name: "Reports", href: "/reports", icon: FileText, show: isSuperAdmin || isMealManager },
     { name: "User Management", href: "/admin/users", icon: ShieldAlert, show: isSuperAdmin },
