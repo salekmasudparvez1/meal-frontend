@@ -65,11 +65,7 @@ export default function Login() {
     },
   });
 
-  const demoAccounts = [
-    { label: "User", email: "user@user.com" },
-    { label: "Manager", email: "manager@manager.com" },
-    { label: "Admin", email: "admin@admin.com" },
-  ];
+ 
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     const userQueryKey = getGetCurrentUserQueryKey();
@@ -152,24 +148,7 @@ export default function Login() {
               🚀 Quick Demo Login
             </p>
 
-            <div className="grid grid-cols-3 gap-2">
-              {demoAccounts.map((acc) => (
-                <Button
-                  key={acc.email}
-                  type="button"
-                  variant="outline"
-                  title={`${acc.email} / Demo@1234`}
-                  disabled={!!demoLoading}
-                  onClick={() => handleDemoLogin(acc.email)}
-                  className="relative overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                >
-                  {demoLoading === acc.email ? "..." : acc.label}
-
-                  {/* glow */}
-                  <span className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl" />
-                </Button>
-              ))}
-            </div>
+           
           </div>
 
           {/* 🧾 FORM */}
