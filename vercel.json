@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "installCommand": "pnpm install",
+  "installCommand": "npx pnpm@9.15.4 install",
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist/public",
   "rewrites": [
