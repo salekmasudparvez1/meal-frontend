@@ -368,7 +368,7 @@ function CreateExpenseDialog({ open, onOpenChange, students }: { open: boolean, 
 
             <div className="space-y-2 border-t pt-4">
               <div className="flex items-center justify-between">
-                <FormLabel className="text-sm font-medium">Who paid initially?</FormLabel>
+                <span className="text-sm font-medium text-foreground">Who paid initially?</span>
                 <div className="flex gap-2">
                   <Button type="button" variant="ghost" size="sm" className="h-8 text-xs" onClick={selectAll}>Select All</Button>
                   <Button type="button" variant="ghost" size="sm" className="h-8 text-xs" onClick={selectNone}>Clear</Button>
