@@ -1,4 +1,12 @@
 # 🍽️ Meal Management System
+## 🚀 Demo Login Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| 👑 **Admin** | **`admin@admin.com`** | **`Demo@1234`** |
+| 👨‍💼 **Manager** | **`manager@manager.com`** | **`Demo@1234`** |
+
+> **💡 Demo Credentials:** Use the accounts above to test all available features.
 
 ### Smart Hostel Meal & Expense Management Platform
 
